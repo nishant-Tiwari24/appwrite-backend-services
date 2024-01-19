@@ -57,5 +57,39 @@ export class Service {
             throw error;
         }
     }
+
+    async getAllPosts(query = [Query.equal("status",active)]) {
+        try {
+            return await this.client.getAllPosts(conf.appwriteDatabaseID, conf.appwriteCollectionID, queries)
+        } catch (error) {
+            console.log("Appwrite getllposts error ::",error);
+            return false;
+        }
+    }
+
+    async uploadFile(file) {
+        try {
+            return await this.bucket.createFile(conf.appwriteBucketID, ID.unique(), file)
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteFile(fileID) {
+        try {
+            await this.bucket.deleteFile(conf.appwriteBucketID, fileID)
+            return true;
+        } catch (error) {
+            console.log("Appwrite deletefile error ::",error);
+            return false;
+        }
+    }
+
+    getFilePreview(fileID) {
+        return this.bucket.getFilePreview(conf.appwriteBucketID, fileID)
+    }
 }
+
+const service = new Service();
+export default service;
 
